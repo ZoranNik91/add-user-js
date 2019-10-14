@@ -1,6 +1,10 @@
 # from __future__ import print_function
 import mysql.connector as MC
 import sys
+from datetime import time
+from datetime import datetime
+import json
+
 
 # Global variables
 is_in = 1
@@ -13,14 +17,29 @@ if len(sys.argv) == 2:
 
     #cursor.execute(f"SELECT user_id FROM times WHERE time BETWEEN '{date_input} 00:00:00' AND '{date_input} 23:59:59'")
     cursor.execute(f"""
-            SELECT name,surname FROM users
+            SELECT name,surname,times.time FROM users
             JOIN times ON times.user_id = users.id
             WHERE time BETWEEN '{date_input} 00:00:00' AND '{date_input} 23:59:59'
             ORDER BY users.name
         """)
     
     rows = cursor.fetchall()
-    print(" \n".join(map(str, rows)))
+
+    res = []
+    for row in rows:
+        dateTime = row[2]
+        formattedTime = dateTime.strftime("%H:%M:%S")
+        formattedDate = dateTime.strftime("%Y-%m-%d")
+        obj = {
+            "name": row[0],
+            "surname": row[1],
+            "time": formattedTime,
+            "date": formattedDate
+        }
+        # ti = time.format(time(dateTime.hour, dateTime.minute, dateTime.second))
+        res.append(obj)
+        
+    print(json.dumps(res, indent=4, sort_keys=True))
 
 else:
 
