@@ -18,7 +18,7 @@ def get_by_date(date):
 
     #cursor.execute(f"SELECT user_id FROM times WHERE time BETWEEN '{date_input} 00:00:00' AND '{date_input} 23:59:59'")
     cursor.execute(f"""
-            SELECT name,surname,times.time FROM users
+            SELECT name,surname,times.time,times.is_in FROM users
             JOIN times ON times.user_id = users.id
             WHERE time BETWEEN '{date} 00:00:00' AND '{date} 23:59:59'
             ORDER BY users.name
@@ -35,7 +35,8 @@ def get_by_date(date):
             "name": row[0],
             "surname": row[1],
             "time": formattedTime,
-            "date": formattedDate
+            "date": formattedDate,
+            "is_in": row[3]
         }
         # ti = time.format(time(dateTime.hour, dateTime.minute, dateTime.second))
         res.append(obj)
