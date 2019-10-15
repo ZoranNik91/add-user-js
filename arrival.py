@@ -10,7 +10,7 @@ import json
 is_in = 1
 # Connect to DB and set cursor
 db = MC.connect(host='localhost', database='employees', user='admin', password='admin')
-cursor = db.cursor()
+cursor = db.cursor() #Allows Python code to execute SQL command in a database session
 
 
 def get_by_date(date):
@@ -49,7 +49,7 @@ if __name__ == '__main__':
 
         date = sys.argv[1]
         res = get_by_date(date)
-        print(json.dumps(res, indent=4, sort_keys=True))
+        print(json.dumps(res, indent=4, sort_keys=True))  # json.dumps() takes an object and produces a string
 
     else:
 
@@ -76,17 +76,17 @@ if __name__ == '__main__':
                 VALUES (%s, %s, %s, %s, %s)
                 """
                 query = (name, surname, email, phone, card_id)
-                cursor.execute(new_query, query)
+                cursor.execute(new_query, query)        # query (inputed values) saves in new_query via %s in SQL
                 print(f"User {name} {surname} was created!")
                 db.commit()
 
         # if the user exists    
         else:
-            cursor.execute("SELECT * FROM times WHERE user_id = {}".format(row[0]))
+            cursor.execute("SELECT * FROM times WHERE user_id = {}".format(row[0]))  # format() - method lets us concatenate elements within a string through positional formatting
             rows =  cursor.fetchall()
 
             # check if we have any record of user_id in times table (cursor.rowcount == 0)
-            if (cursor.rowcount == 0):
+            if (cursor.rowcount == 0):      # Cursor.rowcount property returns number of fetched rows
                 is_in = 1
                 print(f"Welcome user {row[1]}. ", end='')
             # Check if user has entered or is leaving (cursor.rowcount %2 = 0 or 1)
