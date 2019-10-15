@@ -7,6 +7,7 @@ app = Flask(__name__, static_url_path='')
 
 @app.route('/')
 def root():
+    #Renders a template from the template folder with the given context
     return render_template("index.html", title = 'DOLASCI ZA DAN')
 
 
